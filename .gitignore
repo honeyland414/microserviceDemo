@@ -128,3 +128,4 @@ _ReSharper*/
 ## Visual Studio - NCrunch 插件
 *.ncrunch*
 .*crunch*.local.xml
+UserService.iml
