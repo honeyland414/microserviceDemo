@@ -10,17 +10,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class Order {
     @Id
     @Column(name = "id")
     private Integer id;
     @Column(name = "user_id")
     private Integer userId;
-    @Column(name = "name")
-    private String name;
+    @Column(name = "item")
+    private String item;
     @Column(name = "price")
     private Integer price;
-    @Column(name = "num")
-    private Integer num;
+    @Column(name = "amount")
+    private Integer amount;
 }

@@ -30,7 +30,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Integer id) {
-//        System.out.println(truth);
         Optional<User> user = userService.getUserById(id);
         System.out.println(user);
         return user.orElse(null);

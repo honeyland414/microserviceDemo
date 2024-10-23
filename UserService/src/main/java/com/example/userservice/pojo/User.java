@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
     @Id
     @Column(name = "id")
@@ -17,8 +17,6 @@ public class User {
     private String name;
     @Column(name = "age")
     private Integer age;
-    @Column(name = "gender")
-    private Integer gender;
     @Column(name = "phone")
     private String phone;
 }
