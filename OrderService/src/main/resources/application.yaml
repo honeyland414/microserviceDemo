@@ -1,0 +1,27 @@
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+
+logging:
+  level:
+    root: info
+
+#feign:
+#  client:
+#    config:
+#      default:
+#        loggerLevel: FULL
+
+#feign:
+#  httpclient:
+#    enabled: true
+#    max-connections: 200
+#    max-connections-per-route: 50

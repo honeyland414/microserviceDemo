@@ -1,5 +1,4 @@
-package com.example.userservice.config;
-
+package com.example.orderservice.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,11 +11,14 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
+
+
 import javax.sql.DataSource;
 
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.example.userservice.repository")
+@EnableJpaRepositories(basePackages = "com.example.orderservice.repository")
 @EnableTransactionManagement
 public class SpringDataJPAConfig {
     @Value("jdbc:mysql://192.168.98.128:13306/cloud_demo")
@@ -30,6 +32,7 @@ public class SpringDataJPAConfig {
 
     @Value("111111")
     private String password;
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -48,7 +51,7 @@ public class SpringDataJPAConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("com.example.userservice.pojo");
+        factory.setPackagesToScan("com.example.orderservice.pojo");
         factory.setDataSource(dataSource());
         return factory;
     }
@@ -60,4 +63,10 @@ public class SpringDataJPAConfig {
         txManager.setEntityManagerFactory(entityManagerFactory);
         return txManager;
     }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
 }
