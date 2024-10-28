@@ -3,7 +3,13 @@ server:
 spring:
   application:
     name: userservice
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18080/eureka/
+
+tracing:
+  url: http://192.168.66.129:4318/v1/traces
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

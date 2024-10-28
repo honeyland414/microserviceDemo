@@ -6,7 +6,6 @@ import com.example.orderservice.pojo.OrderResponse;
 import com.example.orderservice.pojo.User;
 import com.example.orderservice.service.OrderService;
 import io.opentelemetry.api.GlobalOpenTelemetry;
-import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Span;
@@ -15,7 +14,8 @@ import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.tools.Trace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.TreeMap;
 
 @Slf4j
 @RestController
 @RequestMapping("/order")
 public class OrderController {
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
     private final OrderService orderService;
     private final RestTemplate restTemplate;
 
@@ -46,25 +46,24 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public OrderResponse getOrderById(@PathVariable Integer id) {
-        Tracer tracer = GlobalOpenTelemetry.get().getTracer("orderservice", "1.0");
-
-        String url = "http://userService/user/";
-        String url1 = "http://localhost:8081/user/";
+        String url = "http://localhost:8081/user/";
         Order order;
         User user;
 
+        Tracer tracer = GlobalOpenTelemetry.get().getTracer("orderservice", "1.0");
         Span span = tracer.spanBuilder("order.service.controller").setSpanKind(SpanKind.CLIENT).startSpan();
+
         try (Scope scope = span.makeCurrent()) {
             order = orderService.getOrderById(id).orElse(null);
             span.addEvent("orderservice", Attributes.of(AttributeKey.stringKey("data"), order.toString()));
-
-            user = restTemplate.getForObject(url1 + order.getUserId(), User.class);
+            logger.info("orderservice.tracer", tracer);
+            logger.info("orderservice.span", span);
+            user = restTemplate.getForObject(url + order.getUserId(), User.class);
 
             span.setStatus(StatusCode.OK);
         } finally {
             span.end();
         }
-
 
         return OrderResponse.builder()
                 .order(order)
